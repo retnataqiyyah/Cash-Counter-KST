@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>
+
+        </title>
+        <style>
+            .but{
+                padding:6px 15px;
+                width: 150px;
+            }
+            .but:hover{
+                background-color: greenyellow;
+            }
+        </style>
+    </head>
+<body>
+    <center>
+        <img src="kst.png" alt= "gambar EAD" width="200px" height="150px">
+    <table>
+    
+           <tr>
+               <td>
+                    <p>Masukkan Nominal</p>
+               </td>
+               <td>
+                    :
+               </td>
+               <td>
+                    <input type="text" name="nominal" id="nominal">
+               </td>
+           </tr>
+        <tr>
+            <td colspan="2">
+                    <input type="button" value="Cancel" class="but" onclick="closing()">
+            </td>
+            <td colspan="2">
+                    <input type="button" value="SUBMIT" class="but" onclick="coba()">
+            </td>
+        </tr>
+    </table>
+    <p>Hasil</p>
+    <div id="hasil"></div>
+</center>
+    <script>
+        var rupiah = document.getElementById('nominal');
+		rupiah.addEventListener('keyup', function(e){
+			rupiah.value = formatRupiah(this.value, 'Rp ');
+		});
+ 
+		function formatRupiah(angka, prefix){
+			var number_string = angka.replace(/[^,\d]/g, '').toString(),
+			split   		= number_string.split(','),
+			sisa     		= split[0].length % 3,
+			rupiah     		= split[0].substr(0, sisa),
+			ribuan     		= split[0].substr(sisa).match(/\d{3}/gi);
+
+			if(ribuan){
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+			}
+ 
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return prefix == undefined ? rupiah : (rupiah ? 'Rp ' + rupiah : '');
+		}     
+
+
+        function coba(){
+            var inputRP=document.getElementById("nominal").value;
+            var cleanRP = inputRP.replace(/\D/g, '');
+            var notes = [100000, 50000, 20000, 10000, 5000, 1000, 2000, 100, 500, 200, 100, 50, 25, 1];
+            var noteCounter = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            var i;
+            var text = "";
+            
+                for (i = 0; i < 9; i++){
+                    if (cleanRP >= notes[i]) { 
+                        noteCounter[i] = parseInt(cleanRP / notes[i]); 
+                        cleanRP = cleanRP-notes[i] * noteCounter[i]; 
+                    } 
+                }
+                for (i = 0; i < 9; i++){ 
+                     if (noteCounter[i] != 0){ 
+                        text += notes[i] + "=" + noteCounter[i] + "<br>";
+                        document.getElementById("hasil").innerHTML = text;
+                    } 
+                }
+                
+            }
+        function closing(){
+                document.getElementById("nominal").value=0;
+            } 
+        
+        
+    </script>
+    </body>
+
+</html>
